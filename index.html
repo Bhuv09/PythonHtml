@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Smartphone Sales Analysis with Python</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: #f9f9f9; color: #333; line-height: 1.6; }
+        .container { width: 80%; margin: auto; overflow: hidden; padding: 20px; background: white; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); }
+        h1, h2 { color: #005f73; }
+        pre { background: #272822; color: #f8f8f2; padding: 10px; overflow-x: auto; border-radius: 5px; font-size: 14px; }
+        .note { background: #e6fffa; border-left: 5px solid #00b4d8; padding: 10px; margin: 10px 0; }
+        img { max-width: 100%; margin: 10px 0; border-radius: 5px; box-shadow: 0 0 5px rgba(0,0,0,0.1); display: block; }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<h1>📊 Smartphone Sales Analysis with Python</h1>
+<p>In this project, we explore smartphone sales data to uncover trends in pricing, ratings, and market share using Python. Each section contains the Python code, its corresponding output, and an explanation.</p>
+<hr>
+
+<h2>1.Importing libararies</h2>
+<pre>import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns</pre>
+<div class="note">pandas as pd  Lets you work with data in tables (DataFrames) matplotlib Lets you make charts and graphs seaborn Makes prettier, easier-to-read statistical plot</div>
+
+<h2>2.loading dataset</h2>
+<pre>df = pd.read_excel('smartphone_sales.xlsx')
+df.head()
+df.tail()</pre>
+<img src="jpg1.jpg" alt="Step 1 Output">
+<img src="jpg2.jpg" alt="Step 2 Output">
+<div class="note">Loads the smartphone sales data from the Excel file and df.head shows the first 5 rows and df.tail shows last 5 rows</div>
+
+<h2>3.Checking Dataset Info</h2>
+<pre>print(df.info())</pre>
+<img src="img3.jpg" alt="Step 3 Output">
+<div class="note">Displays column names, data types, and checks for missing values</div>
+
+<h2>4.Total units of smartphone sold</h2>
+<pre>#Total units sold per brand
+brand_sales = df.groupby('brand')['units_sold'].sum().sort_values(ascending=False)
+print(brand_sales)
+sns.barplot(x=brand_sales.values, y=brand_sales.index)
+plt.title('Total Units Sold per Brand')
+plt.xlabel('Units Sold')
+plt.show()</pre>
+<img src="jpg4.jpg" alt="Step 4 Output">
+
+<h2>5.Average price per brand</h2>
+<pre>avg_price = df.groupby('brand')['price_usd'].mean().sort_values(ascending=False)
+print(avg_price)
+sns.barplot(x=avg_price.values, y=avg_price.index)
+plt.title('Average Price per Brand')
+plt.xlabel('Price (USD)')
+plt.show()</pre>
+<img src="jpg5.jpg" alt="Step 5 Output">
+<div class="note">This code calculates the average price (in USD) for each brand and sorts them from highest to lowest. It then plots a horizontal bar chart to display the average price per brand.</div>
+
+<h2>6.Boxplot: Rating by Brand</h2>
+<pre>sns.boxplot(data=df, x='brand', y='rating')
+plt.title('Rating Distribution by Brand')
+plt.xlabel('Brand')
+plt.ylabel('Rating')
+plt.xticks(rotation=45)
+plt.show()
+Ouput:</pre>
+<img src="jpg6.jpg" alt="Step 6 Output">
+<div class="note">This code creates a boxplot to show how ratings are distributed for each brand, helping compare variation and median ratings across brands.</div>
+
+<h2>7.Top 5 most expensive smartphones</h2>
+<pre>top_expensive = df.nlargest(5, 'price_usd')[['brand', 'model', 'price_usd']]
+print(top_expensive)
+Ouput:</pre>
+<img src="jpg7.jpg" alt="Step 7 Output">
+<div class="note">Show top 5 expensive smartphones</div>
+
+<h2>8.Cheapest smartphone per brand</h2>
+<pre>cheapest_per_brand = df.loc[df.groupby('brand')['price_usd'].idxmin()][['brand', 'model', 'price_usd']]
+print(cheapest_per_brand)
+Ouput:</pre>
+<img src="jpg8.jpg" alt="Step 8 Output">
+<div class="note">Shows cheapest smartphone per brand</div>
+
+<h2>9.Market share pie chart by brand</h2>
+<pre>brand_share = df.groupby('brand')['units_sold'].sum()
+brand_share.plot(kind='pie', autopct='%1.1f%%', startangle=90)
+plt.title('Market Share by Brand')
+plt.ylabel('')
+plt.show()</pre>
+<img src="jpg9.jpg" alt="Step 9 Output">
+<div class="note">This code calculates each brand’s total units sold and shows their share as a pie chart, with percentages labeled to compare market share visually.</div>
+
+<h2>10.Count of models released each year</h2>
+<pre>models_per_year = df.groupby('release_year')['model'].count()
+sns.barplot(x=models_per_year.index, y=models_per_year.values)
+plt.title('Number of Smartphone Models Released per Year')
+plt.xlabel('Year')
+plt.ylabel('Count')
+plt.show()
+Ouput:</pre>
+<img src="jpg10.jpg" alt="Step 10 Output">
+<div class="note">This code counts how many smartphone models were released each year and displays the results as a bar chart to show trends over time.</div>
+
+</div>
+</body>
+</html>
